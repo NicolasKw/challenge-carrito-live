@@ -6,7 +6,7 @@ export const ListadoProductosComponent = () => {
   const [productos, setProductos] = useState<Producto[] | undefined>(undefined);
 
   useEffect(() => {
-    fetch("http://localhost:3000/productos")
+    fetch("http://localhost:3001/productos")
       .then((response) => response.json())
       .then((data) => setProductos(data as Producto[]));
   }, []);

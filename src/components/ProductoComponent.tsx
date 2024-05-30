@@ -1,11 +1,47 @@
 import { Producto } from "../models/Producto";
 import { ButtonComponent } from "./ButtonComponent";
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector, TypedUseSelectorHook } from "react-redux";
+import { RootState } from "../redux/store";
+import { agregarProducto, quitarProducto } from "../redux/productosSlice";
+import { operarGemas } from "../redux/gemasSlice";
 
 type Props = {
   producto: Producto;
 };
 
+const useTypedSelector: TypedUseSelectorHook<RootState> = useSelector; 
+
 export const ProductoComponent = ({ producto }: Props) => {
+  const dispatch = useDispatch();
+
+  const gemasDisponibles: number = useTypedSelector((state) => state.gemas.gemasDisponibles);
+  const productosAgregados: Producto[] = useTypedSelector((state) => state.productos.productosSeleccionados);
+
+  const [productoAgregado, setProductoAgregado] = useState<boolean>(false);
+
+  useEffect(() => {
+    if(productosAgregados.some(productoAgregado => productoAgregado.id === producto.id)) {
+      setProductoAgregado(true);
+    }
+  }, []);
+
+  const handleClick = () => {
+    if(!productoAgregado) {
+      dispatch(agregarProducto(producto));
+      dispatch(operarGemas(-producto.precio))
+    } else {
+      dispatch(quitarProducto(producto));
+      dispatch(operarGemas(producto.precio))
+    }
+    setProductoAgregado(!productoAgregado);
+  };
+
+  const handleDisabled = (): boolean => {
+    if(!productoAgregado && producto.precio > gemasDisponibles) return true;
+    else return false;
+  }
+
   return (
     <div
       key={producto.id}
@@ -17,7 +53,9 @@ export const ProductoComponent = ({ producto }: Props) => {
       <div className="absolute top-0 right-0 m-4 bg-green-500 flex justify-center items-center py-1 px-2 rounded-full">
         <p className="text-white">{producto.precio} gemas</p>
       </div>
-      <ButtonComponent>Agregar</ButtonComponent>
+      <ButtonComponent onClick={handleClick} disabled={handleDisabled()}>
+        {(!productoAgregado) ? 'Agregar' : 'Quitar'}
+      </ButtonComponent>
     </div>
   );
 };
