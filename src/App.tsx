@@ -5,15 +5,20 @@ import { ListadoProductosComponent } from "./components/ListadoProductosComponen
 
 function App() {
   const [showCarrito, setShowCarrito] = useState(false);
+
   return (
     <div
       className="min-h-full bg-fixed"
       style={{ backgroundImage: "url(background.webp)" }}
     >
-      <HeaderComponent />
+      <HeaderComponent onShowCarrito={() => setShowCarrito(true)} />
       <div className="flex justify-center min-h-full">
         <div className="max-w-lg w-full py-16">
-          {showCarrito ? <CarritoComponent /> : <ListadoProductosComponent />}
+          {showCarrito ? (
+            <CarritoComponent onProductsShow={() => setShowCarrito(false)} />
+          ) : (
+            <ListadoProductosComponent />
+          )}
         </div>
       </div>
     </div>

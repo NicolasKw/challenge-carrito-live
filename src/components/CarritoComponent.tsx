@@ -1,7 +1,13 @@
-export const CarritoComponent = () => {
+import { ButtonComponent } from "./ButtonComponent";
+
+export const CarritoComponent = ({
+  onProductsShow,
+}: {
+  onProductsShow: () => void;
+}) => {
   return (
     <div>
-      <button>Volver</button>
+      <ButtonComponent onClick={onProductsShow}>Volver</ButtonComponent>
     </div>
   );
 };
