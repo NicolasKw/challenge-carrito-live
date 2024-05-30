@@ -41,6 +41,11 @@ export const CarritoComponent = ({
       .catch((error) => console.log(error))
   };
 
+  const handleDisabled = (): boolean => {
+    if(!productosSeleccionados.length) return true;
+    else return false;
+  }
+
   return (
     <div>
       <div className="w-1/6">
@@ -53,7 +58,7 @@ export const CarritoComponent = ({
           )) : <span>Compra Realizada!</span>
         }
       </div>
-      <ButtonComponent onClick={handleCompra}>Comprar</ButtonComponent>
+      <ButtonComponent onClick={handleCompra} disabled={handleDisabled()}>Comprar</ButtonComponent>
       <div className="text-center my-2">
         {(compraFallada) && <span>No se pudo realizar la compra. Por favor intente nuevamente</span>}
       </div>
